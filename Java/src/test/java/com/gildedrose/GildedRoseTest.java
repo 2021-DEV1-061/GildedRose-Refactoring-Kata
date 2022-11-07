@@ -28,30 +28,6 @@ class GildedRoseTest {
     }
 
     /**
-     *  item sellIn is negative and item is Conjured
-     */
-
-    @Test
-    void ItemSellInIsNegativeAndISConjuredQualityDecreases() {
-        Item item = new Item("Conjured", -3, 20);
-        GildedRose gildedRose = new GildedRose(new Item[]{item});
-        gildedRose.updateQuality();
-        assertEquals(item.quality, 18);
-    }
-
-    /**
-     *  item sellIn is negative and item is Aged Brie and quality less than 50
-     */
-
-    @Test
-    void ItemSellInIsNegativeAndISAgedBrieQualityIncreases() {
-        Item item = new Item("Aged Brie", -3, 20);
-        GildedRose gildedRose = new GildedRose(new Item[]{item});
-        gildedRose.updateQuality();
-        assertEquals(item.quality, 22);
-    }
-
-    /**
      * Sulfuras is a legendary item increases when Sell in is off
      */
     @Test
@@ -109,6 +85,43 @@ class GildedRoseTest {
         GildedRose gildedRose = new GildedRose(new Item[]{item});
         gildedRose.updateQuality();
         assertEquals(item.quality, 0);
+    }
+
+    /**
+     * Backstage quality sellIn Is more TenDays
+     */
+    @Test
+    void backStagePassesQualityIncreases3TimesIn10DaysMore() {
+        Item item = new Item("Backstage passes to a TAFKAL80ETC concert", 11, 2);
+        GildedRose gildedRose = new GildedRose(new Item[]{item});
+        gildedRose.updateQuality();
+        assertEquals(item.name, "Backstage passes to a TAFKAL80ETC concert");
+        assertEquals(item.sellIn, 10);
+        assertEquals(item.quality, 3);
+    }
+
+    /**
+     * Conjured item decrement quality twice faster than normal
+     */
+    @Test
+    void conjuredItemDecreaseQualityTwiceFaster() {
+        Item item = new Item("Conjured Mana Cake", 10, 30);
+        GildedRose gildedRose = new GildedRose(new Item[]{item});
+        gildedRose.updateQuality();
+        assertEquals(item.quality, 28);
+        assertEquals(item.sellIn, 9);
+    }
+
+    /**
+     * Conjured item decrease quality twice when expired
+     */
+    @Test
+    void conjuredItemDecreasesQualityWhenExpired() {
+        Item item = new Item("Conjured Mana Cake", 0, 30);
+        GildedRose gildedRose = new GildedRose(new Item[]{item});
+        gildedRose.updateQuality();
+        assertEquals(item.sellIn, -1);
+        assertEquals(item.quality, 28);
     }
 
 }
